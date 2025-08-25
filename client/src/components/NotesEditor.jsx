@@ -18,6 +18,7 @@ export default function NotesEditor({
   apiBaseUrl,
   adminPass,
   onSave,
+  onBack,
   autoSave = false,
 }) {
   const [title, setTitle] = useState(initialTitle);
@@ -63,7 +64,7 @@ export default function NotesEditor({
           defaultTitle
         );
 
-        if (title === null) return; // Skip if user cancels
+        if (title === null) return;
 
         setPdfs((prev) => [
           ...prev,
@@ -86,7 +87,7 @@ export default function NotesEditor({
   });
 
   // Handle image upload and insertion
-  const handleImageUpload = async (file, cursorPosition = content.length) => {
+  const handleImageUpload = async (file, cursorPosition) => {
     try {
       // Extract clean filename without extension for default title
       const defaultTitle = file.name.replace(/\.[^/.]+$/, "");
@@ -100,20 +101,23 @@ export default function NotesEditor({
       const formData = new FormData();
       formData.append("image", file);
 
+      const token = localStorage.getItem("token");
       const res = await axios.post(`${apiBaseUrl}/images`, formData, {
-        headers: { "x-admin-pass": adminPass },
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
       });
 
       if (res.data.url) {
         const imageMarkdown = `![${title.trim() || defaultTitle}](${
           res.data.url
         })`;
-        setContent(
-          (prev) =>
-            prev.slice(0, cursorPosition) +
-            imageMarkdown +
-            prev.slice(cursorPosition)
-        );
+        setContent((prev) => {
+          const pos =
+            typeof cursorPosition === "number" ? cursorPosition : prev.length;
+          return prev.slice(0, pos) + imageMarkdown + prev.slice(pos);
+        });
         toast.success(`Image "${file.name}" uploaded successfully`);
       }
     } catch (err) {
@@ -190,6 +194,26 @@ export default function NotesEditor({
       {/* Header */}
       <div className="border-b border-gray-800 p-4 flex items-center justify-between bg-gray-800/50 backdrop-blur sticky top-0 z-10">
         <div className="flex-1 flex items-center gap-4">
+          <button
+            type="button"
+            onClick={onBack}
+            className="p-2 text-gray-400 hover:text-gray-300 focus:outline-none"
+            aria-label="Go back"
+          >
+            <svg
+              className="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M10 19l-7-7m0 0l7-7m-7 7h18"
+              />
+            </svg>
+          </button>
           <input
             type="text"
             value={title}
@@ -215,16 +239,14 @@ export default function NotesEditor({
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 flex overflow-hidden">
+      <div className="flex-1 flex">
         {/* Editor */}
-        <div
-          data-color-mode="dark"
-          className="flex-1 overflow-auto markdown-content"
-        >
+        <div data-color-mode="dark" className="flex-1 w-full">
           <MDEditor
             value={content}
             onChange={setContent}
             height="calc(100vh - 73px)"
+            className="w-full h-full"
             textareaProps={{
               onPaste: (event) => {
                 const hasImageFiles =

@@ -126,9 +126,14 @@ export default function AdminPanel() {
         toast.success("Note created successfully");
       }
 
-      setSelectedNote(null);
-      setShowEditor(false);
+      // Update notes list but keep editor open
       fetchNotes();
+
+      // If we're creating a new note, reset the form
+      if (!selectedNote) {
+        setSelectedNote(null);
+        setShowEditor(false);
+      }
     } catch (err) {
       const errorMessage = err.response?.data?.message || err.message;
       toast.error(
@@ -175,6 +180,10 @@ export default function AdminPanel() {
           initialPdfs={selectedNote?.pdfs || []}
           isEdit={!!selectedNote}
           onSave={handleSave}
+          onBack={() => {
+            setShowEditor(false);
+            setSelectedNote(null);
+          }}
           apiBaseUrl={API_BASE_URL}
           adminPass={import.meta.env.VITE_ADMIN_PASS}
         />

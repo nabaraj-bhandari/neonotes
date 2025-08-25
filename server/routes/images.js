@@ -11,7 +11,15 @@ router.post("/", verifyToken, upload.single("image"), async (req, res) => {
   try {
     if (!req.file) return res.status(400).json({ error: "No file uploaded" });
 
-    const result = await uploadToCloudinary(req.file.path, "notes/images");
+    // Create a data URI from the buffer
+    const fileStr = `data:${
+      req.file.mimetype
+    };base64,${req.file.buffer.toString("base64")}`;
+
+    const result = await uploadToCloudinary(fileStr, {
+      folder: "notes/images",
+      resource_type: "auto",
+    });
 
     res.json({ url: result.secure_url });
   } catch (error) {

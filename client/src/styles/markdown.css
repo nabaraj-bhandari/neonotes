@@ -1,0 +1,50 @@
+.markdown-content img {
+  display: block;
+  max-width: 400px;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.markdown-content img[alt*="small"] {
+  max-width: 400px;
+}
+
+.markdown-content img[alt*="medium"] {
+  max-width: 600px;
+}
+
+.markdown-content img[alt*="large"] {
+  max-width: 800px;
+}
+
+.markdown-content img[alt*="full"] {
+  max-width: 100%;
+}
+
+/* Center images with specific alt text */
+.markdown-content img[alt*="center"] {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Float images */
+.markdown-content img[alt*="left"] {
+  float: left;
+  margin-right: 1rem;
+  margin-bottom: 1rem;
+}
+
+.markdown-content img[alt*="right"] {
+  float: right;
+  margin-left: 1rem;
+  margin-bottom: 1rem;
+}
+
+/* Clear floats */
+.markdown-content p:after {
+  content: "";
+  display: table;
+  clear: both;
+}

@@ -50,30 +50,31 @@ export default function NoteDetails() {
   if (!note) return null;
 
   return (
-    <article className="max-w-4xl mx-auto space-y-6 px-4 sm:px-6 py-4 sm:py-6">
-      {/* Back button */}
-      <button
-        onClick={() => navigate("/")}
-        className="text-gray-400 hover:text-gray-300 flex items-center gap-2 -ml-1"
-      >
-        ← Back to Notes
-      </button>
-
+    <article className="w-full sm:max-w-6xl sm:mx-auto space-y-3 sm:space-y-6 px-1 sm:px-6 py-2 sm:py-6">
       {/* Title */}
-      <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-100 break-words">
-        {note.title}
-      </h1>
+      <div className="flex justify-between">
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-100 break-words">
+          {note.title}
+        </h1>
+        {/* Back button */}
+        <button
+          onClick={() => navigate("/")}
+          className="text-white hover:text-gray-300 flex items-center gap-2 -ml-1 bg-orange-500 hover:bg-orange-500/50 px-3 py-1.5 rounded transition-colors cursor-pointer"
+        >
+          ← All Notes
+        </button>
+      </div>
 
       {/* Metadata */}
-      <div className="text-sm text-gray-500">
+      <div className="text-xs sm:text-sm text-gray-500">
         Created: {new Date(note.createdAt).toLocaleDateString()}
       </div>
 
       {/* Content */}
       <div data-color-mode="dark">
         <div className="wmde-markdown-var">
-          <div className="wmde-markdown bg-gray-800 rounded-lg p-3 sm:p-6">
-            <div className="wmde-markdown-color markdown-content prose-sm sm:prose-base">
+          <div className="wmde-markdown bg-gray-800 rounded-lg p-1.5 sm:p-6">
+            <div className="wmde-markdown-color markdown-content prose-xs sm:prose-sm md:prose-base w-full [&>*:first-child]:mt-0 [&>*:last-child]:mb-0">
               <ReactMarkdown
                 remarkPlugins={[remarkGfm, remarkMath]}
                 rehypePlugins={[[rehypeKatex, { strict: false }], rehypeRaw]}
@@ -142,8 +143,8 @@ export default function NoteDetails() {
       {/* PDF attachments */}
 
       {Array.isArray(note?.pdfs) && note.pdfs.length > 0 && (
-        <div className="bg-gray-800 rounded-lg p-3 sm:p-6">
-          <div className="flex items-center gap-2 mb-4">
+        <div className="bg-gray-800 rounded-lg p-1.5 sm:p-6">
+          <div className="flex items-center gap-1.5 sm:gap-2 mb-2 sm:mb-4">
             <svg
               className="w-5 h-5 text-red-500 flex-shrink-0"
               fill="none"
@@ -157,12 +158,12 @@ export default function NoteDetails() {
                 d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"
               />
             </svg>
-            <h2 className="text-lg sm:text-xl font-semibold text-gray-100">
+            <h2 className="text-base sm:text-lg md:text-xl font-semibold text-gray-100">
               Attachments ({note.pdfs.length})
             </h2>
           </div>
 
-          <div className="grid gap-3">
+          <div className="grid gap-1.5 sm:gap-3">
             {note.pdfs.map((pdfItem, idx) => {
               if (!pdfItem) return null;
 
@@ -183,7 +184,7 @@ export default function NoteDetails() {
               return (
                 <div
                   key={idx}
-                  className="flex items-center justify-between p-3 sm:p-4 bg-gray-700/50 rounded-lg hover:bg-gray-700 transition-colors group cursor-pointer"
+                  className="flex items-center justify-between p-2 sm:p-4 bg-gray-700/50 rounded-lg hover:bg-gray-700 transition-colors group cursor-pointer"
                   onClick={() => {
                     setSelectedPdf({ url: pdfUrl, title: displayTitle });
                     setShowPreview(true);
@@ -207,11 +208,11 @@ export default function NoteDetails() {
                       </svg>
                     </div>
                     <div className="min-w-0">
-                      <h3 className="text-sm sm:text-base text-gray-100 font-medium truncate">
+                      <h3 className="text-xs sm:text-sm md:text-base text-gray-100 font-medium truncate">
                         {displayTitle}
                       </h3>
                       {fileName && (
-                        <p className="text-xs sm:text-sm text-gray-400 truncate">
+                        <p className="text-xs sm:text-xs md:text-sm text-gray-400 truncate">
                           {fileName}
                         </p>
                       )}

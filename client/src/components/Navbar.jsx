@@ -6,7 +6,7 @@ export default function Navbar() {
 
   return (
     <nav className="bg-gray-800 border-b border-gray-700">
-      <div className="container mx-auto px-3 sm:px-4">
+      <div className="w-full px-2 sm:container sm:mx-auto sm:px-4">
         <div className="flex justify-between items-center h-14 sm:h-16">
           {/* Logo/Home Link */}
           <Link to="/" className="flex items-center gap-1.5 sm:gap-2">

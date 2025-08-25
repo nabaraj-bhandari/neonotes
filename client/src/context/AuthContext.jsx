@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 import axios from "axios";
 
 const API_BASE_URL =
@@ -39,7 +39,7 @@ export function AuthProvider({ children }) {
   };
 
   // Check for existing token on mount
-  useState(() => {
+  useEffect(() => {
     const existingToken = localStorage.getItem("token");
     if (existingToken) {
       setToken(existingToken);
@@ -47,6 +47,12 @@ export function AuthProvider({ children }) {
       axios.defaults.headers.common[
         "Authorization"
       ] = `Bearer ${existingToken}`;
+
+      // Verify token is still valid
+      axios.get(`${API_BASE_URL}/auth/verify`).catch(() => {
+        // If token is invalid, log out
+        logout();
+      });
     }
   }, []);
 

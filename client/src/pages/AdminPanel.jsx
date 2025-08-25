@@ -43,8 +43,11 @@ export default function AdminPanel() {
     if (!window.confirm("Are you sure you want to delete this note?")) return;
 
     try {
+      const token = localStorage.getItem("token");
       await axios.delete(`${API_BASE_URL}/notes/${noteId}`, {
-        headers: { "x-admin-pass": import.meta.env.VITE_ADMIN_PASS },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
       toast.success("Note deleted successfully");
       fetchNotes();
@@ -59,6 +62,7 @@ export default function AdminPanel() {
     try {
       if (selectedNote) {
         // Handle update
+        console.log("Update data:", { noteData, selectedNote });
         const formData = new FormData();
         formData.append("title", noteData.title);
         formData.append("content", noteData.content);
@@ -76,17 +80,21 @@ export default function AdminPanel() {
         const existingPdfs = selectedNote.pdfs || [];
         const removePdfs = existingPdfs
           .filter((existingPdf) => {
-            // Get URLs from existing PDFs that are no longer in noteData.pdfs
-            return !noteData.existingPdfs?.includes(existingPdf.url);
+            const pdfUrl =
+              typeof existingPdf === "string" ? existingPdf : existingPdf.url;
+            return !noteData.existingPdfs?.includes(pdfUrl);
           })
-          .map((pdf) => pdf.url);
+          .map((pdf) => (typeof pdf === "string" ? pdf : pdf.url));
 
         if (removePdfs.length > 0) {
           formData.append("removePdfs", JSON.stringify(removePdfs));
         }
 
+        const token = localStorage.getItem("token");
         await axios.put(`${API_BASE_URL}/notes/${selectedNote._id}`, formData, {
-          headers: { "x-admin-pass": import.meta.env.VITE_ADMIN_PASS },
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
         });
         toast.success("Note updated successfully");
       } else {
@@ -109,8 +117,11 @@ export default function AdminPanel() {
           }
         }
 
+        const token = localStorage.getItem("token");
         await axios.post(`${API_BASE_URL}/notes/`, formData, {
-          headers: { "x-admin-pass": import.meta.env.VITE_ADMIN_PASS },
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         });
         toast.success("Note created successfully");
       }
@@ -119,10 +130,17 @@ export default function AdminPanel() {
       setShowEditor(false);
       fetchNotes();
     } catch (err) {
+      const errorMessage = err.response?.data?.message || err.message;
       toast.error(
-        selectedNote ? "Failed to update note" : "Failed to create note"
+        selectedNote
+          ? `Failed to update note: ${errorMessage}`
+          : `Failed to create note: ${errorMessage}`
       );
-      console.error(err);
+      console.error("API Error:", {
+        status: err.response?.status,
+        data: err.response?.data,
+        error: err,
+      });
     }
   };
 

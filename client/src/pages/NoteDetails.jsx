@@ -50,16 +50,16 @@ export default function NoteDetails() {
   if (!note) return null;
 
   return (
-    <article className="w-full sm:max-w-6xl sm:mx-auto space-y-3 sm:space-y-6 px-1 sm:px-6 py-2 sm:py-6">
+    <article className="w-full sm:max-w-6xl sm:mx-auto space-y-4 sm:space-y-6 px-3 sm:px-6 py-3 sm:py-6">
       {/* Title */}
-      <div className="flex justify-between">
-        <h1 className="text-2xl sm:text-3xl font-bold text-gray-100 break-words">
+      <div className="flex flex-col-reverse sm:flex-row sm:justify-between sm:items-center gap-4 sm:gap-6">
+        <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-100 break-words">
           {note.title}
         </h1>
         {/* Back button */}
         <button
           onClick={() => navigate("/")}
-          className="text-white hover:text-gray-300 flex items-center gap-2 -ml-1 bg-orange-500 hover:bg-orange-500/50 px-3 py-1.5 rounded transition-colors cursor-pointer"
+          className="text-white hover:text-gray-300 flex items-center justify-center gap-2 w-full sm:w-auto bg-orange-500 hover:bg-orange-500/50 px-4 py-2 sm:px-3 sm:py-1.5 rounded transition-colors cursor-pointer text-sm sm:text-base"
         >
           ← All Notes
         </button>

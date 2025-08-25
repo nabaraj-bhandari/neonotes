@@ -15,7 +15,7 @@ function App() {
       <AuthProvider>
         <div className="min-h-screen bg-gray-900 text-gray-100">
           <Navbar />
-          <main className="container mx-auto px-4 py-8">
+          <main className="w-full sm:container sm:mx-auto py-4 sm:py-8">
             <Routes>
               <Route path="/" element={<NotesList />} />
               <Route path="/:id" element={<NoteDetails />} />

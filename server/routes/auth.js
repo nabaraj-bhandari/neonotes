@@ -1,7 +1,13 @@
 import express from "express";
 import jwt from "jsonwebtoken";
+import { verifyToken } from "../middleware/auth.js";
 
 const router = express.Router();
+
+// Verify token endpoint
+router.get("/verify", verifyToken, (req, res) => {
+  res.json({ valid: true });
+});
 
 router.post("/login", async (req, res) => {
   const { password } = req.body;

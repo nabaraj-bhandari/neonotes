@@ -1,7 +1,7 @@
 {
-  "name": "NeoNotes - Note Sharing Platform",
+  "name": "NeoNotes",
   "short_name": "NeoNotes",
-  "description": "A modern platform for creating, managing, and sharing notes with support for Markdown, LaTeX, and file attachments",
+  "description": "A modern platform for creating, managing, and sharing notes.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#111827",

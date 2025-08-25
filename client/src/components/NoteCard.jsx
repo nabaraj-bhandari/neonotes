@@ -13,17 +13,17 @@ export default function NoteCard({ note }) {
   return (
     <Link
       to={`/${note._id}`}
-      className="block bg-gray-800 rounded-lg p-4 sm:p-6 hover:bg-gray-700 transition-colors"
+      className="block bg-slate-800/50 rounded-lg p-4 hover:bg-slate-700/50 transition-all duration-200 border border-blue-900/10 hover:border-orange-500/20 shadow-sm hover:shadow-md"
     >
-      <h2 className="text-lg sm:text-xl font-semibold text-gray-100 mb-2 line-clamp-2">
+      <h2 className="text-lg sm:text-xl font-semibold text-blue-100 mb-2 sm:mb-3 line-clamp-2 font-serif">
         {note.title}
       </h2>
       <div
         data-color-mode="dark"
-        className="text-gray-400 line-clamp-2 sm:line-clamp-3 mb-3 sm:mb-4"
+        className="text-gray-300 line-clamp-1 mb-2 sm:mb-3 font-serif text-base sm:text-lg leading-relaxed opacity-75"
       >
         <div className="wmde-markdown-var">
-          <div className="markdown-content">
+          <div className="markdown-content prose-base sm:prose-lg prose-invert prose-slate">
             <ReactMarkdown
               remarkPlugins={[remarkGfm, remarkMath]}
               rehypePlugins={[[rehypeKatex, { strict: false }], rehypeRaw]}
@@ -72,7 +72,7 @@ export default function NoteCard({ note }) {
                 ),
               }}
             >
-              {note.content.slice(0, 150)}
+              {note.content.split("\n")[0]}
             </ReactMarkdown>
           </div>
         </div>
@@ -80,11 +80,11 @@ export default function NoteCard({ note }) {
 
       {/* PDF badges */}
       {note.pdfs?.length > 0 && (
-        <div className="flex flex-wrap gap-1.5 sm:gap-2 mb-3 sm:mb-4">
+        <div className="flex flex-wrap gap-1.5 mb-2">
           {note.pdfs.map((_, idx) => (
             <span
               key={idx}
-              className="px-1.5 sm:px-2 py-0.5 sm:py-1 bg-gray-700 text-gray-300 text-xs rounded"
+              className="px-2 py-0.5 bg-orange-500/5 text-orange-300/90 text-xs rounded-sm border border-orange-500/10"
             >
               PDF {idx + 1}
             </span>
@@ -93,7 +93,7 @@ export default function NoteCard({ note }) {
       )}
 
       {/* Metadata */}
-      <div className="text-xs sm:text-sm text-gray-500">
+      <div className="text-xs text-blue-400/50">
         {new Date(note.createdAt).toLocaleDateString()}
       </div>
     </Link>

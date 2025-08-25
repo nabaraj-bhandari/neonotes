@@ -42,7 +42,7 @@ export default function NoteDetails() {
   if (loading) {
     return (
       <div className="flex justify-center items-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-orange-500"></div>
       </div>
     );
   }
@@ -50,40 +50,40 @@ export default function NoteDetails() {
   if (!note) return null;
 
   return (
-    <article className="w-full sm:max-w-6xl sm:mx-auto space-y-4 sm:space-y-6 px-3 sm:px-6 py-3 sm:py-6">
+    <article className="space-y-8 sm:space-y-12">
       {/* Title and Back button on same row */}
-      <div className="flex flex-row justify-between items-center gap-4 sm:gap-6">
-        <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-100 break-words">
+      <div className="flex flex-row justify-between items-start gap-4 sm:gap-6">
+        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-blue-100 break-words font-serif leading-tight">
           {note.title}
         </h1>
         {/* Back button */}
         <button
           onClick={() => navigate("/")}
-          className="text-white hover:text-gray-300 flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-500/50 px-4 py-2 sm:px-3 sm:py-1.5 rounded transition-colors cursor-pointer text-sm sm:text-base"
+          className="text-white flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-orange-600 hover:from-blue-700 hover:to-orange-700 px-4 py-2 rounded-lg transition-all duration-200 cursor-pointer text-sm sm:text-base font-medium shadow-lg hover:shadow-orange-500/10"
         >
           ← All Notes
         </button>
       </div>
 
       {/* Metadata */}
-      <div className="text-xs sm:text-sm text-gray-500">
+      <div className="text-base sm:text-lg text-blue-400/70 font-serif">
         Created: {new Date(note.createdAt).toLocaleDateString()}
       </div>
 
       {/* Content */}
-      <div data-color-mode="dark">
-        <div className="wmde-markdown-var">
-          <div className="wmde-markdown bg-gray-800 rounded-lg p-1.5 px-3 sm:p-6 overflow-hidden">
-            <div className="wmde-markdown-color markdown-content prose-xs sm:prose-sm md:prose-base w-full max-w-none [&>*:first-child]:mt-0 [&>*:last-child]:mb-0 [&_img]:!m-0 [&>*]:px-1 sm:[&>*]:px-0">
+      <div data-color-mode="dark" className="w-full">
+        <div className="wmde-markdown-var w-full">
+          <div className="w-full">
+            <div className="wmde-markdown-color markdown-content w-full max-w-none prose-invert prose-slate font-serif prose-p:text-xl sm:prose-p:text-2xl prose-p:!leading-relaxed prose-p:text-gray-200 prose-headings:font-serif prose-h1:text-4xl sm:prose-h1:text-5xl prose-h2:text-3xl sm:prose-h2:text-4xl prose-h3:text-2xl sm:prose-h3:text-3xl prose-headings:text-blue-100 prose-headings:leading-tight prose-a:text-orange-400 hover:prose-a:text-orange-300 prose-code:text-blue-300 prose-strong:text-blue-200 [&>*]:my-6 sm:[&>*]:my-8 prose-li:text-xl sm:prose-li:text-2xl">
               <ReactMarkdown
                 remarkPlugins={[remarkGfm, remarkMath]}
                 rehypePlugins={[[rehypeKatex, { strict: false }], rehypeRaw]}
                 components={{
                   img: ({ node, ...props }) => (
-                    <div className="flex justify-center my-4">
+                    <div className="flex justify-center my-6">
                       <img
                         {...props}
-                        className="wmde-markdown-image max-w-full h-auto object-contain rounded-lg"
+                        className="wmde-markdown-image max-w-full h-auto object-contain rounded-lg shadow-lg"
                         style={{ maxHeight: "80vh" }}
                         alt={props.alt || "Note image"}
                         loading="lazy"
@@ -94,8 +94,8 @@ export default function NoteDetails() {
                     <code
                       className={`${className || ""} ${
                         inline
-                          ? "wmde-markdown-inline-code"
-                          : "wmde-markdown-code"
+                          ? "wmde-markdown-inline-code text-xl"
+                          : "wmde-markdown-code text-lg"
                       }`}
                       {...props}
                     >
@@ -103,36 +103,75 @@ export default function NoteDetails() {
                     </code>
                   ),
                   pre: ({ node, children, ...props }) => (
-                    <pre className="wmde-markdown-pre" {...props}>
+                    <pre
+                      className="wmde-markdown-pre text-lg leading-relaxed my-6"
+                      {...props}
+                    >
                       {children}
                     </pre>
                   ),
                   table: ({ node, children, ...props }) => (
-                    <div className="wmde-markdown-table-wrapper">
-                      <table className="wmde-markdown-table" {...props}>
+                    <div className="wmde-markdown-table-wrapper my-6">
+                      <table className="wmde-markdown-table text-lg" {...props}>
                         {children}
                       </table>
                     </div>
                   ),
                   th: ({ node, children, ...props }) => (
-                    <th className="wmde-markdown-th" {...props}>
+                    <th
+                      className="wmde-markdown-th text-lg font-serif"
+                      {...props}
+                    >
                       {children}
                     </th>
                   ),
                   td: ({ node, children, ...props }) => (
-                    <td className="wmde-markdown-td" {...props}>
+                    <td
+                      className="wmde-markdown-td text-lg font-serif"
+                      {...props}
+                    >
                       {children}
                     </td>
                   ),
                   p: ({ node, children, ...props }) => (
-                    <p className="wmde-markdown-p" {...props}>
+                    <p
+                      className="wmde-markdown-p text-xl sm:text-2xl !leading-relaxed my-6 font-serif"
+                      {...props}
+                    >
                       {children}
                     </p>
                   ),
                   blockquote: ({ node, children, ...props }) => (
-                    <blockquote className="wmde-markdown-blockquote" {...props}>
+                    <blockquote
+                      className="wmde-markdown-blockquote text-xl sm:text-2xl italic my-6 border-l-4 border-orange-500/30 pl-6"
+                      {...props}
+                    >
                       {children}
                     </blockquote>
+                  ),
+                  h1: ({ node, children, ...props }) => (
+                    <h1
+                      className="text-4xl sm:text-5xl font-serif font-bold text-blue-100 my-8"
+                      {...props}
+                    >
+                      {children}
+                    </h1>
+                  ),
+                  h2: ({ node, children, ...props }) => (
+                    <h2
+                      className="text-3xl sm:text-4xl font-serif font-bold text-blue-100 my-6"
+                      {...props}
+                    >
+                      {children}
+                    </h2>
+                  ),
+                  h3: ({ node, children, ...props }) => (
+                    <h3
+                      className="text-2xl sm:text-3xl font-serif font-bold text-blue-100 my-4"
+                      {...props}
+                    >
+                      {children}
+                    </h3>
                   ),
                 }}
               >
@@ -146,10 +185,10 @@ export default function NoteDetails() {
       {/* PDF attachments */}
 
       {Array.isArray(note?.pdfs) && note.pdfs.length > 0 && (
-        <div className="bg-gray-800 rounded-lg p-1.5 sm:p-6">
-          <div className="flex items-center gap-1.5 sm:gap-2 mb-2 sm:mb-4">
+        <div className="bg-slate-800/50 rounded-lg p-4 sm:p-8 border border-blue-900/20 shadow-lg">
+          <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6">
             <svg
-              className="w-5 h-5 text-red-500 flex-shrink-0"
+              className="w-6 h-6 text-orange-500 flex-shrink-0"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"

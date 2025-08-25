@@ -6,9 +6,9 @@ import mongoose from "mongoose";
 
 import upload from "../middleware/multer.js";
 import { uploadToCloudinary } from "../config/cloudinary.js";
+import { verifyToken } from "../middleware/auth.js";
 
 import {
-  adminAuth,
   extractImageUrls,
   deleteFilesFromCloudinary,
   diffImageUrls,
@@ -30,7 +30,7 @@ router.get("/", async (req, res) => {
 // Create note
 router.post(
   "/",
-  adminAuth,
+  verifyToken,
   upload.fields([{ name: "pdfs", maxCount: 5 }]),
   async (req, res) => {
     try {
@@ -111,7 +111,7 @@ router.get("/:id", async (req, res) => {
 // Update Note By ID
 router.put(
   "/:id",
-  adminAuth,
+  verifyToken,
   upload.fields([
     {
       name: "pdfs",
@@ -216,7 +216,7 @@ router.put(
 );
 
 // Delete a document
-router.delete("/:id", adminAuth, async (req, res) => {
+router.delete("/:id", verifyToken, async (req, res) => {
   const { id } = req.params;
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(400).json({ error: "Invalid Note ID" });

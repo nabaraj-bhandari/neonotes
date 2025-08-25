@@ -12,6 +12,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Routes
+import authRouter from "./routes/auth.js";
+
+app.use("/api/auth", authRouter);
 app.use("/api/notes", notesRouter);
 app.use("/api/images", imagesRouter);
 

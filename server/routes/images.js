@@ -2,12 +2,12 @@
 import express from "express";
 import upload from "../middleware/multer.js";
 import { uploadToCloudinary } from "../config/cloudinary.js";
-import { adminAuth } from "../utils/notes.js";
+import { verifyToken } from "../middleware/auth.js";
 
 const router = express.Router();
 
 // Upload single inline image
-router.post("/", adminAuth, upload.single("image"), async (req, res) => {
+router.post("/", verifyToken, upload.single("image"), async (req, res) => {
   try {
     if (!req.file) return res.status(400).json({ error: "No file uploaded" });
 

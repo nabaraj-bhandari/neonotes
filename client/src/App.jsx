@@ -5,6 +5,7 @@ import NoteDetails from "./pages/NoteDetails";
 import AdminPanel from "./pages/AdminPanel";
 import Login from "./pages/Login";
 import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
 import PrivateRoute from "./components/PrivateRoute";
 import { AuthProvider } from "./context/AuthContext";
 import "react-toastify/dist/ReactToastify.css";
@@ -36,6 +37,7 @@ function App() {
             autoClose={3000}
           />
         </div>
+        <Footer />
       </AuthProvider>
     </Router>
   );

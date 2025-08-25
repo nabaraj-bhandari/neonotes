@@ -51,15 +51,15 @@ export default function NoteDetails() {
 
   return (
     <article className="w-full sm:max-w-6xl sm:mx-auto space-y-4 sm:space-y-6 px-3 sm:px-6 py-3 sm:py-6">
-      {/* Title */}
-      <div className="flex flex-col-reverse sm:flex-row sm:justify-between sm:items-center gap-4 sm:gap-6">
+      {/* Title and Back button on same row */}
+      <div className="flex flex-row justify-between items-center gap-4 sm:gap-6">
         <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-100 break-words">
           {note.title}
         </h1>
         {/* Back button */}
         <button
           onClick={() => navigate("/")}
-          className="text-white hover:text-gray-300 flex items-center justify-center gap-2 w-full sm:w-auto bg-orange-500 hover:bg-orange-500/50 px-4 py-2 sm:px-3 sm:py-1.5 rounded transition-colors cursor-pointer text-sm sm:text-base"
+          className="text-white hover:text-gray-300 flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-500/50 px-4 py-2 sm:px-3 sm:py-1.5 rounded transition-colors cursor-pointer text-sm sm:text-base"
         >
           ← All Notes
         </button>
@@ -73,19 +73,22 @@ export default function NoteDetails() {
       {/* Content */}
       <div data-color-mode="dark">
         <div className="wmde-markdown-var">
-          <div className="wmde-markdown bg-gray-800 rounded-lg p-1.5 sm:p-6">
-            <div className="wmde-markdown-color markdown-content prose-xs sm:prose-sm md:prose-base w-full [&>*:first-child]:mt-0 [&>*:last-child]:mb-0">
+          <div className="wmde-markdown bg-gray-800 rounded-lg p-1.5 px-3 sm:p-6 overflow-hidden">
+            <div className="wmde-markdown-color markdown-content prose-xs sm:prose-sm md:prose-base w-full max-w-none [&>*:first-child]:mt-0 [&>*:last-child]:mb-0 [&_img]:!m-0 [&>*]:px-1 sm:[&>*]:px-0">
               <ReactMarkdown
                 remarkPlugins={[remarkGfm, remarkMath]}
                 rehypePlugins={[[rehypeKatex, { strict: false }], rehypeRaw]}
                 components={{
                   img: ({ node, ...props }) => (
-                    <img
-                      {...props}
-                      className="wmde-markdown-image max-w-full rounded-lg"
-                      alt={props.alt || "Note image"}
-                      loading="lazy"
-                    />
+                    <div className="flex justify-center my-4">
+                      <img
+                        {...props}
+                        className="wmde-markdown-image max-w-full h-auto object-contain rounded-lg"
+                        style={{ maxHeight: "80vh" }}
+                        alt={props.alt || "Note image"}
+                        loading="lazy"
+                      />
+                    </div>
                   ),
                   code: ({ node, inline, className, children, ...props }) => (
                     <code
@@ -184,14 +187,16 @@ export default function NoteDetails() {
               return (
                 <div
                   key={idx}
-                  className="flex items-center justify-between p-2 sm:p-4 bg-gray-700/50 rounded-lg hover:bg-gray-700 transition-colors group cursor-pointer"
-                  onClick={() => {
-                    setSelectedPdf({ url: pdfUrl, title: displayTitle });
-                    setShowPreview(true);
-                  }}
+                  className="flex items-center justify-between p-2 sm:p-4 bg-gray-700/50 rounded-lg hover:bg-gray-700 transition-colors group"
                 >
-                  {/* Icon + Title */}
-                  <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+                  {/* Icon + Title - Clickable area for direct PDF open */}
+                  <a
+                    href={pdfUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 sm:gap-3 min-w-0 flex-grow cursor-pointer"
+                    onClick={(e) => e.stopPropagation()}
+                  >
                     <div className="flex-shrink-0">
                       <svg
                         className="w-6 h-6 sm:w-8 sm:h-8 text-red-500/80 group-hover:text-red-500 transition-colors"
@@ -217,18 +222,19 @@ export default function NoteDetails() {
                         </p>
                       )}
                     </div>
-                  </div>
+                  </a>
 
                   {/* Actions */}
                   <div className="flex items-center gap-2 ml-4">
                     {/* Preview PDF */}
                     <button
-                      onClick={() => {
+                      onClick={(e) => {
+                        e.stopPropagation();
                         setSelectedPdf({ url: pdfUrl, title: displayTitle });
                         setShowPreview(true);
                       }}
                       className="p-2 text-gray-400 hover:text-gray-300 transition-colors"
-                      title="Preview PDF"
+                      title="Preview in app"
                     >
                       <svg
                         className="w-5 h-5"

@@ -13,10 +13,15 @@ export default function NoteCard({ note }) {
   return (
     <Link
       to={`/${note._id}`}
-      className="block bg-gray-800 rounded-lg p-6 hover:bg-gray-700 transition-colors"
+      className="block bg-gray-800 rounded-lg p-4 sm:p-6 hover:bg-gray-700 transition-colors"
     >
-      <h2 className="text-xl font-semibold text-gray-100 mb-2">{note.title}</h2>
-      <div data-color-mode="dark" className="text-gray-400 line-clamp-3 mb-4">
+      <h2 className="text-lg sm:text-xl font-semibold text-gray-100 mb-2 line-clamp-2">
+        {note.title}
+      </h2>
+      <div
+        data-color-mode="dark"
+        className="text-gray-400 line-clamp-2 sm:line-clamp-3 mb-3 sm:mb-4"
+      >
         <div className="wmde-markdown-var">
           <div className="markdown-content">
             <ReactMarkdown
@@ -75,11 +80,11 @@ export default function NoteCard({ note }) {
 
       {/* PDF badges */}
       {note.pdfs?.length > 0 && (
-        <div className="flex gap-2 mb-4">
+        <div className="flex flex-wrap gap-1.5 sm:gap-2 mb-3 sm:mb-4">
           {note.pdfs.map((_, idx) => (
             <span
               key={idx}
-              className="px-2 py-1 bg-gray-700 text-gray-300 text-xs rounded"
+              className="px-1.5 sm:px-2 py-0.5 sm:py-1 bg-gray-700 text-gray-300 text-xs rounded"
             >
               PDF {idx + 1}
             </span>
@@ -88,7 +93,7 @@ export default function NoteCard({ note }) {
       )}
 
       {/* Metadata */}
-      <div className="text-sm text-gray-500">
+      <div className="text-xs sm:text-sm text-gray-500">
         {new Date(note.createdAt).toLocaleDateString()}
       </div>
     </Link>

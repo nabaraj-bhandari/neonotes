@@ -8,13 +8,19 @@ export default function Login() {
   const { login } = useAuth();
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (login(password)) {
-      toast.success("Logged in successfully");
-      navigate("/admin");
-    } else {
-      toast.error("Invalid password");
+
+    try {
+      const success = await login(password);
+      if (success) {
+        toast.success("Logged in successfully");
+        navigate("/admin");
+      } else {
+        toast.error("Invalid password");
+      }
+    } catch (error) {
+      toast.error("Login failed. Please try again.");
     }
   };
 

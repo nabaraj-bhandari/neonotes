@@ -50,17 +50,19 @@ export default function NoteDetails() {
   if (!note) return null;
 
   return (
-    <article className="max-w-4xl mx-auto space-y-6">
+    <article className="max-w-4xl mx-auto space-y-6 px-4 sm:px-6 py-4 sm:py-6">
       {/* Back button */}
       <button
         onClick={() => navigate("/")}
-        className="text-gray-400 hover:text-gray-300 flex items-center gap-2"
+        className="text-gray-400 hover:text-gray-300 flex items-center gap-2 -ml-1"
       >
         ← Back to Notes
       </button>
 
       {/* Title */}
-      <h1 className="text-4xl font-bold text-gray-100">{note.title}</h1>
+      <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-100 break-words">
+        {note.title}
+      </h1>
 
       {/* Metadata */}
       <div className="text-sm text-gray-500">
@@ -70,8 +72,8 @@ export default function NoteDetails() {
       {/* Content */}
       <div data-color-mode="dark">
         <div className="wmde-markdown-var">
-          <div className="wmde-markdown bg-gray-800 rounded-lg p-6">
-            <div className="wmde-markdown-color markdown-content">
+          <div className="wmde-markdown bg-gray-800 rounded-lg p-3 sm:p-6">
+            <div className="wmde-markdown-color markdown-content prose-sm sm:prose-base">
               <ReactMarkdown
                 remarkPlugins={[remarkGfm, remarkMath]}
                 rehypePlugins={[[rehypeKatex, { strict: false }], rehypeRaw]}
@@ -140,10 +142,10 @@ export default function NoteDetails() {
       {/* PDF attachments */}
 
       {Array.isArray(note?.pdfs) && note.pdfs.length > 0 && (
-        <div className="bg-gray-800 rounded-lg p-6">
+        <div className="bg-gray-800 rounded-lg p-3 sm:p-6">
           <div className="flex items-center gap-2 mb-4">
             <svg
-              className="w-5 h-5 text-red-500"
+              className="w-5 h-5 text-red-500 flex-shrink-0"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -155,7 +157,7 @@ export default function NoteDetails() {
                 d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"
               />
             </svg>
-            <h2 className="text-xl font-semibold text-gray-100">
+            <h2 className="text-lg sm:text-xl font-semibold text-gray-100">
               Attachments ({note.pdfs.length})
             </h2>
           </div>
@@ -181,13 +183,17 @@ export default function NoteDetails() {
               return (
                 <div
                   key={idx}
-                  className="flex items-center justify-between p-4 bg-gray-700/50 rounded-lg hover:bg-gray-700 transition-colors group"
+                  className="flex items-center justify-between p-3 sm:p-4 bg-gray-700/50 rounded-lg hover:bg-gray-700 transition-colors group cursor-pointer"
+                  onClick={() => {
+                    setSelectedPdf({ url: pdfUrl, title: displayTitle });
+                    setShowPreview(true);
+                  }}
                 >
                   {/* Icon + Title */}
-                  <div className="flex items-center gap-3 min-w-0">
+                  <div className="flex items-center gap-2 sm:gap-3 min-w-0">
                     <div className="flex-shrink-0">
                       <svg
-                        className="w-8 h-8 text-red-500/80 group-hover:text-red-500 transition-colors"
+                        className="w-6 h-6 sm:w-8 sm:h-8 text-red-500/80 group-hover:text-red-500 transition-colors"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -201,11 +207,11 @@ export default function NoteDetails() {
                       </svg>
                     </div>
                     <div className="min-w-0">
-                      <h3 className="text-gray-100 font-medium truncate">
+                      <h3 className="text-sm sm:text-base text-gray-100 font-medium truncate">
                         {displayTitle}
                       </h3>
                       {fileName && (
-                        <p className="text-sm text-gray-400 truncate">
+                        <p className="text-xs sm:text-sm text-gray-400 truncate">
                           {fileName}
                         </p>
                       )}
@@ -243,28 +249,6 @@ export default function NoteDetails() {
                         />
                       </svg>
                     </button>
-
-                    {/* Direct Download */}
-                    <a
-                      href={pdfUrl}
-                      download={fileName || "attachment.pdf"}
-                      className="p-2 text-gray-400 hover:text-gray-300 transition-colors"
-                      title="Download PDF"
-                    >
-                      <svg
-                        className="w-5 h-5"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
-                        />
-                      </svg>
-                    </a>
                   </div>
                 </div>
               );
@@ -278,8 +262,8 @@ export default function NoteDetails() {
         <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50">
           <div className="bg-gray-900 w-full h-full flex flex-col">
             {/* Modal Header */}
-            <div className="flex items-center justify-between p-4 border-b border-gray-800">
-              <h3 className="text-lg font-medium text-gray-100">
+            <div className="flex items-center justify-between p-3 sm:p-4 border-b border-gray-800">
+              <h3 className="text-base sm:text-lg font-medium text-gray-100 truncate mr-2">
                 {selectedPdf.title || "PDF Preview"}
               </h3>
               <button
@@ -287,7 +271,7 @@ export default function NoteDetails() {
                   setShowPreview(false);
                   setSelectedPdf(null);
                 }}
-                className="text-gray-400 hover:text-gray-300"
+                className="text-gray-400 hover:text-gray-300 p-1"
               >
                 <svg
                   className="w-6 h-6"

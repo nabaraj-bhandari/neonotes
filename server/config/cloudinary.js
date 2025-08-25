@@ -1,6 +1,5 @@
 import { v2 as cloudinary } from "cloudinary";
 import dotenv from "dotenv";
-import fs from "fs";
 
 dotenv.config();
 
@@ -10,19 +9,21 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-export const uploadToCloudinary = async (filePath, folder) => {
+export const uploadToCloudinary = async (file, folder) => {
   try {
-    const result = await cloudinary.uploader.upload(filePath, { folder });
-
-    fs.unlink(filePath, (err) => {
-      if (err) console.error("Error deleting local file:", err);
+    const result = await new Promise((resolve, reject) => {
+      const uploadStream = cloudinary.uploader.upload_stream(
+        { folder },
+        (error, result) => {
+          if (error) reject(error);
+          else resolve(result);
+        }
+      );
+      uploadStream.end(file.buffer);
     });
-
     return result;
   } catch (error) {
-    fs.unlink(filePath, (err) => {
-      if (err) console.error("Error deleting local file:", err);
-    });
+    console.error("Error uploading to Cloudinary:", error);
     throw error;
   }
 };

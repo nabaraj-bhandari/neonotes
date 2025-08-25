@@ -53,7 +53,7 @@ router.post(
       if (req.files["pdfs"]) {
         const uploads = await Promise.all(
           req.files["pdfs"].map((file) =>
-            uploadToCloudinary(file.path, "notes/pdfs")
+            uploadToCloudinary(file, "notes/pdfs")
           )
         );
 
@@ -154,7 +154,7 @@ router.put(
       if (req.files["pdfs"]) {
         const uploads = await Promise.all(
           req.files["pdfs"].map((file) =>
-            uploadToCloudinary(file.path, "notes/pdfs")
+            uploadToCloudinary(file, "notes/pdfs")
           )
         );
 
